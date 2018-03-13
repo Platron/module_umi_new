@@ -1,0 +1,43 @@
+<?php
+/**
+ * Способ оплаты Platron.
+ *
+ * @var umiTemplaterPHP|ViewPhpExtension|DemomarketPhpExtension $this
+ * @var array $variables
+ */
+?>
+
+<form action="<?=$variables['purchasing']['pg_url'] ?>" method="post">
+
+	   <input type="hidden" name="pg_merchant_id" value="<?=$variables['purchasing']['pg_merchant_id'] ?>" />
+	   <input type="hidden" name="pg_order_id" value="<?=$variables['purchasing']['pg_order_id'] ?>" />
+	   <input type="hidden" name="pg_currency" value="<?=$variables['purchasing']['pg_currency'] ?>" />
+	   <input type="hidden" name="pg_amount" value="<?=$variables['purchasing']['pg_amount'] ?>" />
+	   <input type="hidden" name="pg_lifetime" value="<?=$variables['purchasing']['pg_lifetime'] ?>" />
+	   <input type="hidden" name="pg_testing_mode" value="<?=$variables['purchasing']['pg_testing_mode'] ?>" />
+	   <input type="hidden" name="pg_description" value="<?=$variables['purchasing']['pg_description'] ?>" />	
+	
+	   <input type="hidden" name="pg_language" value="<?=$variables['purchasing']['pg_language'] ?>" />	
+	   <input type="hidden" name="pg_check_url" value="<?=$variables['purchasing']['pg_check_url'] ?>" />	
+	   <input type="hidden" name="pg_result_url" value="<?=$variables['purchasing']['pg_result_url'] ?>" />	
+	   <input type="hidden" name="pg_request_method" value="<?=$variables['purchasing']['pg_request_method'] ?>" />	
+	   <input type="hidden" name="pg_success_url" value="<?=$variables['purchasing']['pg_success_url'] ?>" />	
+	   <input type="hidden" name="pg_failure_url" value="<?=$variables['purchasing']['pg_failure_url'] ?>" />	
+	   <input type="hidden" name="pg_salt" value="<?=$variables['purchasing']['pg_salt'] ?>" />
+	   <input type="hidden" name="cms_payment_module" value="<?=$variables['purchasing']['cms_payment_module'] ?>" />	
+	   <input type="hidden" name="pg_payment_system" value="<?=$variables['purchasing']['pg_payment_system'] ?>" />	
+	   
+	   
+	   <input type="hidden" name="pg_user_phone" value="<?=$variables['purchasing']['pg_user_phone'] ?>" />
+	   <input type="hidden" name="pg_user_email" value="<?=$variables['purchasing']['pg_user_email'] ?>" />	
+	   <input type="hidden" name="pg_user_contact_email" value="<?=$variables['purchasing']['pg_user_contact_email'] ?>" />	
+	   <input type="hidden" name="pg_sig" value="<?=$variables['purchasing']['pg_sig'] ?>" />	
+
+	   <p>
+		Нажмите кнопку "Оплатить" для перехода на сайт платежной системы <strong>Platron</strong>.
+	   </p>        
+
+	<p>
+		<input type="submit" value="Оплатить" />
+	</p>
+</form>
