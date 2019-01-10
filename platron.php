@@ -86,38 +86,36 @@ class platronPayment extends payment {
 			$bCreateOfdCheck = ( @$this->object->create_ofd_check ) ? 1 : 0;
 
    			if ($bCreateOfdCheck == 1) {
-
-       			$paymentId = (string)$responseElement->pg_payment_id;
-
+				$paymentId = (string)$responseElement->pg_payment_id;
 				$VATstr = $this->getVatNameFromTaxDescription( @$this->object->ofd_vat_type );
-
-       	        $ofdReceiptItems = array();
-       			foreach($this->order->getItems() as $objItem) {
-					$ofdReceiptItem = new OfdReceiptItem();
-					$ofdReceiptItem->label = $objItem->getName();
-       	            $ofdReceiptItem->amount = round($objItem->getItemPrice() * $objItem->getAmount(), 2);
-       	            $ofdReceiptItem->price = round($objItem->getItemPrice(), 2);
-       	            $ofdReceiptItem->quantity = $objItem->getAmount();
-       	            $ofdReceiptItem->vat = $VATstr;
-       	            $ofdReceiptItems[] = $ofdReceiptItem;
+				$ofdReceiptItems = array();
+				foreach($this->order->getItems() as $objItem) {
+				$ofdReceiptItem = new OfdReceiptItem();
+				$ofdReceiptItem->label = $objItem->getName();
+			        $ofdReceiptItem->amount = round($objItem->getItemPrice() * $objItem->getAmount(), 2);
+			        $ofdReceiptItem->price = round($objItem->getItemPrice(), 2);
+			        $ofdReceiptItem->quantity = $objItem->getAmount();
+			        $ofdReceiptItem->vat = $VATstr;
+			        $ofdReceiptItems[] = $ofdReceiptItem;
            		}
 
-				$umiObjectsCollection = umiObjectsCollection::getInstance();
-				$delivery = $umiObjectsCollection->getObject($this->order->getValue("delivery_id"));
+			$umiObjectsCollection = umiObjectsCollection::getInstance();
+			$delivery = $umiObjectsCollection->getObject($this->order->getValue("delivery_id"));
 
-				if ($delivery) {
-					$shipping_name = $delivery->getName();
-					$shipping = $this->order->getDeliveryPrice();
-					if ($shipping > 0) {
-	       				$ofdReceiptItem = new OfdReceiptItem();
-	       				$ofdReceiptItem->label = trim($shipping_name);
-	       				$ofdReceiptItem->amount = round($shipping, 2);
-    	   				$ofdReceiptItem->price = round($shipping, 2);
-	       				$ofdReceiptItem->quantity = 1;
-	       				$ofdReceiptItem->vat = $VATstr == 'none'? 'none': '18';
-	       				$ofdReceiptItems[] = $ofdReceiptItem;
-					}
-				} 
+			if ($delivery) {
+				$shipping_name = $delivery->getName();
+				$shipping = $this->order->getDeliveryPrice();
+				if ($shipping > 0) {
+				$ofdReceiptItem = new OfdReceiptItem();
+				$ofdReceiptItem->label = trim($shipping_name);
+				$ofdReceiptItem->amount = round($shipping, 2);
+				$ofdReceiptItem->price = round($shipping, 2);
+				$ofdReceiptItem->quantity = 1;
+				$ofdReceiptItem->vat = $VATstr == 'none'? 'none': '20';
+				$ofdReceiptItem->type = 'service';
+				$ofdReceiptItems[] = $ofdReceiptItem;
+				}
+			} 
 
        			$ofdReceiptRequest = new OfdReceiptRequest($this->object->merchant_id, $paymentId);
        			$ofdReceiptRequest->items = $ofdReceiptItems;
@@ -157,9 +155,11 @@ class platronPayment extends payment {
 				->getGuidedItems($taxGuideId);
 
 		if ($taxList[$taxId]) {
-			if (strpos ($taxList[$taxId], '18/118') !== false) return '118';
+			if (strpos ($taxList[$taxId], '20/120') !== false) return '120';
+			if (strpos ($taxList[$taxId], '18/118') !== false) return '120';
 			if (strpos ($taxList[$taxId], '10/100') !== false) return '110';
-			if (strpos ($taxList[$taxId], '18%') !== false) return '18';
+			if (strpos ($taxList[$taxId], '20%') !== false) return '20';
+			if (strpos ($taxList[$taxId], '18%') !== false) return '20';
 			if (strpos ($taxList[$taxId], '10%') !== false) return '10';
 			if (strpos ($taxList[$taxId], '0%') !== false) return '0';
 		}
@@ -169,10 +169,10 @@ class platronPayment extends payment {
 		/*
 			[40] => Без НДС 
 			[44] => НДС по расчетной ставке 10/110 
-			[45] => НДС по расчетной ставке 18/118 
+			[45] => НДС по расчетной ставке 20/120 
 			[41] => НДС по ставке 0% 
 			[42] => НДС по ставке 10% 
-			[43] => НДС по ставке 18% )
+			[43] => НДС по ставке 20% )
 		*/
 	}
 
